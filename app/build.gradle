@@ -35,6 +35,8 @@ android {
     }
 }
 def room_version = "2.3.0"
+def anko_version = "0.10.8"
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -46,4 +48,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    //
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
 }
