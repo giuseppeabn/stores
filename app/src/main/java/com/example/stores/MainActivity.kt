@@ -61,4 +61,14 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     override fun onClick(storeEntity: StoreEntity) {
         TODO("Not yet implemented")
     }
+
+    override fun onFavoriteStore(storeEntity: StoreEntity) {
+        storeEntity.isFavorite = !storeEntity.isFavorite
+        doAsync {
+            StoreApplication.dataBase.storeDao().updateStore(storeEntity)
+            uiThread {
+                mAdapter.update(storeEntity)
+            }
+        }
+    }
 }

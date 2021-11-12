@@ -21,6 +21,10 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private var lis
 
         fun setListener(storeEntity: StoreEntity){
             binding.root.setOnClickListener { listener.onClick(storeEntity) }
+            binding.cbFavorite.setOnClickListener {
+                Log.d("Test", "vamos")
+                listener.onFavoriteStore(storeEntity)
+            }
         }
     }
 
@@ -35,6 +39,7 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private var lis
         with(holder){
             setListener(store)
             binding.tvName.text = store.name
+            binding.cbFavorite.isChecked = store.isFavorite
         }
     }
 
@@ -49,5 +54,13 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private var lis
     fun setSores(stores: MutableList<StoreEntity>) {
         this.stores = stores
         notifyDataSetChanged()
+    }
+
+    fun update(storeEntity: StoreEntity) {
+        val index = stores.indexOf(storeEntity)
+        if(index != -1){
+            stores[index] = storeEntity
+            notifyItemChanged(index)
+        }
     }
 }
