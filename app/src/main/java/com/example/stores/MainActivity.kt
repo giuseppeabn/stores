@@ -8,6 +8,8 @@ import com.example.stores.databinding.ActivityMainBinding
 import com.example.stores.db.StoreApplication
 import com.example.stores.interfaces.OnClickListener
 import com.example.stores.model.StoreEntity
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -33,12 +35,26 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun initRecyclerView(){
         mAdapter = StoreAdapter(mutableListOf(), this)
         mGridLayout = GridLayoutManager(this, 2)
-
+        getStores()
         binding.recyclerView.apply {
             adapter = mAdapter
             mGridLayout = mGridLayout
 
             setHasFixedSize(true)// Indicamos que no cambia de tamanio
+        }
+    }
+
+    private fun getStores(){
+        // Esta tarea se ejecuta en segundo plano
+        // por eso se requiere de uiThread
+        doAsync {
+            val stores = StoreApplication.dataBase.storeDao().getAllStores()
+            // hilo principal de la app
+            // si la tarea realiza cambios en la ui, debe ejecutarse
+            // en este hilo
+            uiThread {
+                mAdapter.setSores(stores)
+            }
         }
     }
 

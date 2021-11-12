@@ -45,4 +45,9 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private var lis
         Log.d("Test", stores.size.toString())
         notifyDataSetChanged()
     }
+
+    fun setSores(stores: MutableList<StoreEntity>) {
+        this.stores = stores
+        notifyDataSetChanged()
+    }
 }
