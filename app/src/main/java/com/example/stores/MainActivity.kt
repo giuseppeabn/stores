@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.adapter.StoreAdapter
 import com.example.stores.databinding.ActivityMainBinding
 import com.example.stores.interfaces.OnClickListener
-import com.example.stores.model.Store
+import com.example.stores.model.StoreEntity
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //TODO: DELETE ME
+        binding.btnSave.setOnClickListener {
+            val store = StoreEntity(name = binding.etName.text.toString().trim())
+            mAdapter.add(store)
+        }
         initRecyclerView()
     }
 
@@ -32,7 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
-    override fun onClick(store: Store) {
+    override fun onClick(storeEntity: StoreEntity) {
         TODO("Not yet implemented")
     }
 }
