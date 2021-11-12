@@ -1,7 +1,7 @@
 package com.example.stores.interfaces
 
-import com.example.stores.model.Store
+import com.example.stores.model.StoreEntity
 
 interface OnClickListener {
-    fun onClick(store: Store)
+    fun onClick(storeEntity: StoreEntity)
 }
