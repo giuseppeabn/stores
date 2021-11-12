@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.adapter.StoreAdapter
 import com.example.stores.databinding.ActivityMainBinding
+import com.example.stores.db.StoreApplication
 import com.example.stores.interfaces.OnClickListener
 import com.example.stores.model.StoreEntity
 
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         //TODO: DELETE ME
         binding.btnSave.setOnClickListener {
             val store = StoreEntity(name = binding.etName.text.toString().trim())
+            Thread {
+                StoreApplication.dataBase.storeDao().addStore(store)
+            }.start()
             mAdapter.add(store)
         }
         initRecyclerView()
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.recyclerView.apply {
             adapter = mAdapter
             mGridLayout = mGridLayout
+
             setHasFixedSize(true)// Indicamos que no cambia de tamanio
         }
     }
