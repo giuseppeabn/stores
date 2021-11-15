@@ -21,15 +21,20 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //TODO: DELETE ME
-        binding.btnSave.setOnClickListener {
-            val store = StoreEntity(name = binding.etName.text.toString().trim())
-            Thread {
-                StoreApplication.dataBase.storeDao().addStore(store)
-            }.start()
-            mAdapter.add(store)
-        }
+        binding.fab.setOnClickListener { launchEditFragment() }
         initRecyclerView()
+    }
+
+    private fun launchEditFragment() {
+        // instancia del fragmento
+        val fragment = EditStoreFragment()
+        // gestor para controlar los fragmentos
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        // como se va a ejecutar
+        fragmentTransaction.add(R.id.containerMain, fragment)
+        fragmentTransaction.commit()
+        binding.fab.hide()
     }
 
     private fun initRecyclerView(){
