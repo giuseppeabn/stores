@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         val fragmentTransaction = fragmentManager.beginTransaction()
         // como se va a ejecutar
         fragmentTransaction.add(R.id.containerMain, fragment)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
         binding.fab.hide()
     }
