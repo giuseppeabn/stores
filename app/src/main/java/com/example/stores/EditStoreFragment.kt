@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.example.stores.databinding.FragmentEditStoreBinding
+import com.google.android.material.snackbar.Snackbar
 
 class EditStoreFragment : Fragment() {
     private lateinit var mBinding: FragmentEditStoreBinding
+    private var mActivity: MainActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -19,9 +21,9 @@ class EditStoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // obtener la actividad donde esta insertado el fragment
-        val activity = activity as? MainActivity
-        activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
+        mActivity = activity as? MainActivity
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
 
         setHasOptionsMenu(true)// acceso al menu
     }
@@ -29,5 +31,31 @@ class EditStoreFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_save, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                mActivity?.onBackPressed()
+                true
+            }
+            R.id.action_save -> {
+                Snackbar.make(
+                    mBinding.root,
+                    getString(R.string.edit_store_message_save_success),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // ciclo de vide del fragment
+    override fun onDestroy() {
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        mActivity?.supportActionBar?.title = getString(R.string.app_name)
+        setHasOptionsMenu(false)
+        super.onDestroy()
     }
 }

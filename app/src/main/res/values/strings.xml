@@ -12,4 +12,5 @@
     <string name="hint_photo_url">url de la imagen</string>
     <string name="edit_store_title_add">Crear Tienda</string>
     <string name="save">guardar</string>
+    <string name="edit_store_message_save_success">Tienda agrega correctamente</string>
 </resources>
