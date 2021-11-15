@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.adapter.StoreAdapter
 import com.example.stores.databinding.ActivityMainBinding
 import com.example.stores.db.StoreApplication
+import com.example.stores.interfaces.MainAux
 import com.example.stores.interfaces.OnClickListener
 import com.example.stores.model.StoreEntity
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var mAdapter: StoreAdapter
@@ -86,4 +87,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             }
         }
     }
+
+    override fun hideFab(isVisible: Boolean) {
+        if(isVisible) binding.fab.show() else binding.fab.hide()
+    }
+
 }

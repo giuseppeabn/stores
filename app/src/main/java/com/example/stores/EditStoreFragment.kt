@@ -22,8 +22,9 @@ class EditStoreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // obtener la actividad donde esta insertado el fragment
         mActivity = activity as? MainActivity
-        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
+        // mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
+        handleSupportActionBar(true)
 
         setHasOptionsMenu(true)// acceso al menu
     }
@@ -51,10 +52,19 @@ class EditStoreFragment : Fragment() {
         }
     }
 
+    private fun handleSupportActionBar(isVisible:Boolean){
+        var title = if(isVisible) getString(R.string.edit_store_title_add) else getString(R.string.app_name)
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(isVisible)
+        mActivity?.supportActionBar?.title = title
+        mActivity?.hideFab(!isVisible)
+
+    }
+
     // ciclo de vide del fragment
     override fun onDestroy() {
-        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        mActivity?.supportActionBar?.title = getString(R.string.app_name)
+        // mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        // mActivity?.supportActionBar?.title = getString(R.string.app_name)
+        handleSupportActionBar(false)
         setHasOptionsMenu(false)
         super.onDestroy()
     }
