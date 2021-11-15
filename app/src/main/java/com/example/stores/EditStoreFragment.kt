@@ -1,10 +1,16 @@
 package com.example.stores
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.stores.databinding.FragmentEditStoreBinding
+import com.example.stores.db.StoreApplication
+import com.example.stores.model.StoreEntity
 import com.google.android.material.snackbar.Snackbar
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class EditStoreFragment : Fragment() {
     private lateinit var mBinding: FragmentEditStoreBinding
@@ -41,14 +47,28 @@ class EditStoreFragment : Fragment() {
                 true
             }
             R.id.action_save -> {
+                handleSaveStore()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun handleSaveStore(){
+        val store = StoreEntity(name = mBinding.etName.toString().trim(),
+            phone = mBinding.etPhone.toString().trim(),
+            website = mBinding.etWebsite.toString().trim()
+        )
+        doAsync {
+            StoreApplication.dataBase.storeDao().addStore(store)
+            uiThread {
+                hideKeyboard()
                 Snackbar.make(
                     mBinding.root,
                     getString(R.string.edit_store_message_save_success),
                     Snackbar.LENGTH_SHORT
                 ).show()
-                true
             }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -60,12 +80,22 @@ class EditStoreFragment : Fragment() {
 
     }
 
+    private fun hideKeyboard(){
+        val inputMethodManager = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if(view != null){
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+        }
+    }
+
+    override fun onDestroyView() {
+        hideKeyboard()
+        super.onDestroyView()
+    }
     // ciclo de vide del fragment
     override fun onDestroy() {
         // mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         // mActivity?.supportActionBar?.title = getString(R.string.app_name)
         handleSupportActionBar(false)
-        setHasOptionsMenu(false)
         super.onDestroy()
     }
 }
