@@ -55,7 +55,7 @@ class EditStoreFragment : Fragment() {
     }
 
     fun handleSaveStore(){
-        val store = StoreEntity(name = mBinding.etName.toString().trim(),
+        val store = StoreEntity(name = mBinding.etName.text.toString().trim(),
             phone = mBinding.etPhone.toString().trim(),
             website = mBinding.etWebsite.toString().trim()
         )
@@ -68,6 +68,7 @@ class EditStoreFragment : Fragment() {
                     getString(R.string.edit_store_message_save_success),
                     Snackbar.LENGTH_SHORT
                 ).show()
+                mActivity?.onBackPressed()
             }
         }
     }
