@@ -26,9 +26,10 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         initRecyclerView()
     }
 
-    private fun launchEditFragment() {
+    private fun launchEditFragment(args: Bundle? = null) {
         // instancia del fragmento
         val fragment = EditStoreFragment()
+        if(args != null) fragment.arguments = args
         // gestor para controlar los fragmentos
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -65,8 +66,10 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         }
     }
 
-    override fun onClick(storeEntity: StoreEntity) {
-        TODO("Not yet implemented")
+    override fun onClick(storeId: Long) {
+        val args = Bundle()
+        args.putLong(getString(R.string.key_id), storeId)
+        launchEditFragment(args)
     }
 
     override fun onFavoriteStore(storeEntity: StoreEntity) {

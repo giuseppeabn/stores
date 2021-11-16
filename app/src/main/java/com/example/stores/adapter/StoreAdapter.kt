@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.stores.R
 import com.example.stores.databinding.ItemStoreBinding
 import com.example.stores.interfaces.OnClickListener
@@ -20,7 +22,7 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private var lis
         val binding = ItemStoreBinding.bind(view)
 
         fun setListener(storeEntity: StoreEntity){
-            binding.root.setOnClickListener { listener.onClick(storeEntity) }
+            binding.root.setOnClickListener { listener.onClick(storeEntity.id) }
             binding.root.setOnLongClickListener {
                 listener.onDeleteStore(storeEntity)
                 true
@@ -44,6 +46,11 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private var lis
             setListener(store)
             binding.tvName.text = store.name
             binding.cbFavorite.isChecked = store.isFavorite
+            Glide.with(mContext)
+                .load(store.photoUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(binding.imgPhoto)
         }
     }
 
