@@ -60,7 +60,7 @@ class EditStoreFragment : Fragment() {
             website = mBinding.etWebsite.toString().trim()
         )
         doAsync {
-            StoreApplication.dataBase.storeDao().addStore(store)
+            store.id = StoreApplication.dataBase.storeDao().addStore(store)
             uiThread {
                 mActivity?.addStore(store)
                 hideKeyboard()
