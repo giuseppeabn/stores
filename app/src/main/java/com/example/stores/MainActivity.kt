@@ -92,4 +92,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         if(isVisible) binding.fab.show() else binding.fab.hide()
     }
 
+    override fun addStore(storeEntity: StoreEntity) {
+        mAdapter.add(storeEntity)
+    }
+
+    override fun updateStore(storeEntity: StoreEntity) {
+    }
+
 }
