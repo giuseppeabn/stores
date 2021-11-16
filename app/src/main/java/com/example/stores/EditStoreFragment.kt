@@ -4,7 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.stores.databinding.FragmentEditStoreBinding
 import com.example.stores.db.StoreApplication
 import com.example.stores.model.StoreEntity
@@ -30,9 +34,16 @@ class EditStoreFragment : Fragment() {
         mActivity = activity as? MainActivity
         // mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         // mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
-        handleSupportActionBar(true)
+        handleSupportActionBar(true)// acceso al menu
 
-        setHasOptionsMenu(true)// acceso al menu
+        setHasOptionsMenu(true)
+        mBinding.etPhotoUrl.addTextChangedListener {
+            Glide.with(this)
+                .load(mBinding.etPhotoUrl.text.toString())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(mBinding.imgPhoto)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -54,37 +65,41 @@ class EditStoreFragment : Fragment() {
         }
     }
 
-    fun handleSaveStore(){
-        val store = StoreEntity(name = mBinding.etName.text.toString().trim(),
+    fun handleSaveStore() {
+        val store = StoreEntity(
+            name = mBinding.etName.text.toString().trim(),
             phone = mBinding.etPhone.toString().trim(),
-            website = mBinding.etWebsite.toString().trim()
+            website = mBinding.etWebsite.toString().trim(),
+            photoUrl = mBinding.etPhotoUrl.toString().trim(),
         )
         doAsync {
             store.id = StoreApplication.dataBase.storeDao().addStore(store)
             uiThread {
                 mActivity?.addStore(store)
                 hideKeyboard()
-                Snackbar.make(
-                    mBinding.root,
+                Toast.makeText(
+                    mActivity,
                     getString(R.string.edit_store_message_save_success),
-                    Snackbar.LENGTH_SHORT
+                    Toast.LENGTH_SHORT
                 ).show()
                 mActivity?.onBackPressed()
             }
         }
     }
 
-    private fun handleSupportActionBar(isVisible:Boolean){
-        var title = if(isVisible) getString(R.string.edit_store_title_add) else getString(R.string.app_name)
+    private fun handleSupportActionBar(isVisible: Boolean) {
+        var title =
+            if (isVisible) getString(R.string.edit_store_title_add) else getString(R.string.app_name)
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(isVisible)
         mActivity?.supportActionBar?.title = title
         mActivity?.hideFab(!isVisible)
 
     }
 
-    private fun hideKeyboard(){
-        val inputMethodManager = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if(view != null){
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (view != null) {
             inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
         }
     }
@@ -93,6 +108,7 @@ class EditStoreFragment : Fragment() {
         hideKeyboard()
         super.onDestroyView()
     }
+
     // ciclo de vide del fragment
     override fun onDestroy() {
         // mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
